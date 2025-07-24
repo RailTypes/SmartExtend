@@ -9,7 +9,7 @@
 Scripted by @RailTypes
 Created 2025-07-10 UTC
 Updated 2025-07-19 UTC
-Version 0.1.0-alpha
+Version 0.1.1-alpha+2
 Licensed under MIT
 Repository at https://github.com/RailTypes/SmartExtend
 
@@ -49,14 +49,34 @@ local scale = 1
 local rotEpsilon: number? = nil
 local sizeEpsilon: number? = nil
 
+local nan = tonumber("nan")
+
 -- GUI setup
 gui.Parent = CoreGui
 gui.Main.Preview.CurrentCamera = workspace.CurrentCamera
+
+-- Gets the size from the given NormalId.
+local function sizeFromNormalId(): number
+	local size
+	if selected:IsA("Model") then
+		if not selected.PrimaryPart then return nan end
+		size = selected.PrimaryPart.Size
+	else
+		size = selected.Size
+	end
+	local direction = Enum.NormalId:FromValue(directionIdx) :: Enum.NormalId
+	return
+		if direction == Enum.NormalId.Right or direction == Enum.NormalId.Left then size.X
+		elseif direction == Enum.NormalId.Top or direction == Enum.NormalId.Bottom then size.Y
+		elseif direction == Enum.NormalId.Back or direction == Enum.NormalId.Front then size.Z
+		else nan
+end
 
 -- Sets the visibility of the options.
 local function setOptionsVisible(visible: boolean)
 	gui.Main.Direction.Visible = visible
 	gui.Main.Scale.Visible = visible
+	gui.Main.Length.Visible = visible
 	gui.Main.RotEpsilon.Visible = visible
 	gui.Main.SizeEpsilon.Visible = visible
 	gui.Main.Preview.Visible = visible
@@ -136,6 +156,7 @@ local function updateDirection()
 	directionIdx = (directionIdx + 1) % 6
 	local direction = Enum.NormalId:FromValue(directionIdx) :: Enum.NormalId
 	gui.Main.Direction.Text = direction.Name
+	gui.Main.Length.Text = tostring(sizeFromNormalId() * scale)
 	generatePreview()
 end
 
@@ -155,6 +176,7 @@ local function onSelectionChanged()
 	isSelected = true
 
 	gui.Main.Path.Text = currentSelected:GetFullName()
+	gui.Main.Length.Text = tostring(sizeFromNormalId() * scale)
 	setOptionsVisible(true)
 	generatePreview()
 end
@@ -190,6 +212,16 @@ numberBox(gui.Main.Scale, function(number)
 	if not number then return end
 	local processed = math.max(number, 0)
 	scale = processed
+	gui.Main.Length.Text = tostring(sizeFromNormalId() * scale)
+	generatePreview()
+	return processed
+end, scale, true)
+
+numberBox(gui.Main.Length, function(number)
+	if not number then return end
+	local processed = math.clamp(number, 0.001, 2048)
+	scale = processed / sizeFromNormalId()
+	gui.Main.Scale.Text = tostring(scale)
 	generatePreview()
 	return processed
 end, scale, true)
