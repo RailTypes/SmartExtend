@@ -9,7 +9,7 @@
 Scripted by @RailTypes
 Created 2025-07-10 UTC
 Updated 2025-07-19 UTC
-Version 0.1.1-alpha+2
+Version 0.1.1-alpha+3
 Licensed under MIT
 Repository at https://github.com/RailTypes/SmartExtend
 
