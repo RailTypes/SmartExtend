@@ -1,7 +1,8 @@
 # SmartExtend
-Extends models while using as few parts as possible by resizing them
+Extends models while using as few parts as possible by resizing them.
 
-Available on [GitHub](https://github.com/RailTypes/SmartExtend/releases/tag/SmartExtend) and the [Roblox Creator Store](https://create.roblox.com/store/asset/127766719562667) (plugin also on [GitHub](https://github.com/RailTypes/SmartExtend/releases/tag/Plugin))
+The module is available on the [releases page](https://github.com/RailTypes/SmartExtend/releases) and the [Roblox Creator Store](https://create.roblox.com/store/asset/127766719562667).
+The plugin is also on the releases page and the [Creator Store](https://create.roblox.com/store/asset/125008315136342).
 
 ## Usage
 Running the function is very simple - just provide the required arguments.
