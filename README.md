@@ -1,5 +1,5 @@
 # SmartExtend
-Extends models while using as few parts as possible by resizing them.
+Extends models by resizing and cloning parts based on size and rotation.
 
 The module is available on the [releases page](https://github.com/RailTypes/SmartExtend/releases) and the [Roblox Creator Store](https://create.roblox.com/store/asset/127766719562667).
 The plugin is also on the releases page and the [Creator Store](https://create.roblox.com/store/asset/125008315136342).
