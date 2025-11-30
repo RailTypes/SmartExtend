@@ -5,7 +5,7 @@ The module is available on the [releases page](https://github.com/RailTypes/Smar
 The plugin is also on the releases page and the [Creator Store](https://create.roblox.com/store/asset/125008315136342).
 
 ## Usage
-Running the function is very simple - just provide the required arguments.
+Running the function is very simple—just provide the required arguments.
 ```lua
 extending: Model | BasePart, -- The model or part you want to extend
 direction: Enum.NormalId, -- The direction you want to extend in
