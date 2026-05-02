@@ -4,16 +4,34 @@
 
 --[[
 
-#################
-## SmartExtend ##
-#################
+	#################
+	## SmartExtend ##
+	#################
 
-Scripted by @RailTypes
-Created 2025-07-09 UTC
-Updated 2025-07-19 UTC
-Version 0.1.0-alpha+17
-Licensed under Apache-2.0
-Repository at https://github.com/RailTypes/SmartExtend
+	Extends models by resizing and cloning parts based on size and rotation.
+
+	Author: @RailTypes
+	Created: 2025-07-09 UTC
+	Updated: 2026-05-02 UTC
+	Version: 0.1.1-alpha+18
+	License: Apache License 2.0
+		SPDX Identifier: Apache-2.0
+	GitHub: https://github.com/RailTypes/SmartExtend
+	Codeberg: N/A
+
+	Copyright 2025-2026 RailTypes
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
 
 ]]
 
@@ -35,11 +53,11 @@ local function faceToAxis(vector: Vector3, face: Enum.NormalId): number
 	elseif face == Enum.NormalId.Back or face == Enum.NormalId.Front then
 		return vector.Z
 	else
-		return tonumber("nan") :: number
+		return 0 / 0
 	end
 end
 
--- Uses the given localized CFrame and primary direction to determine the secondary direction.
+-- Uses the given localized CFrame and primary direction to determine the localized direction.
 local function getLocalDirection(
 	cframe: CFrame,
 	primaryDirection: Enum.NormalId,
@@ -83,21 +101,16 @@ local function doExtend(
 )
 	local rotOffset = primaryPart.CFrame:ToObjectSpace(part.CFrame).Rotation
 	local size = faceToAxis(part.Size, sizeDirection)
+	local posFactor = (size * scale - size) / 2
 	part.CFrame *= rotOffset:Inverse() * CFrame.new(
-		if primaryDirection == Enum.NormalId.Right
-			then (size * scale - size) / 2
-			elseif primaryDirection == Enum.NormalId.Left
-			then (size * scale - size) / -2
+		if primaryDirection == Enum.NormalId.Right then posFactor
+			elseif primaryDirection == Enum.NormalId.Left then -posFactor
 			else 0,
-		if primaryDirection == Enum.NormalId.Top
-			then (size * scale - size) / 2
-			elseif primaryDirection == Enum.NormalId.Bottom
-			then (size * scale - size) / -2
+		if primaryDirection == Enum.NormalId.Top then posFactor
+			elseif primaryDirection == Enum.NormalId.Bottom then -posFactor
 			else 0,
-		if primaryDirection == Enum.NormalId.Back
-			then (size * scale - size) / 2
-			elseif primaryDirection == Enum.NormalId.Front
-			then (size * scale - size) / -2
+		if primaryDirection == Enum.NormalId.Back then posFactor
+			elseif primaryDirection == Enum.NormalId.Front then -posFactor
 			else 0
 	) * rotOffset
 	part.Size = Vector3.new(
@@ -149,7 +162,7 @@ local function instanceAlongPart(
 				if direction == Enum.NormalId.Back then dist
 					elseif direction == Enum.NormalId.Front then -dist
 					else 0
-			) * offset)
+				) * offset)
 			clone.Parent = instance.Parent
 		end
 	elseif scale < 1 and ratio > scale then
